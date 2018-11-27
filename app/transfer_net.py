@@ -60,10 +60,15 @@ class TransferNet:
         image_tensor = image_tensor.to(self.device)
         return image_tensor
 
-    def load_image(self, image_path: str):
+    def load_image(self, image_path: str, gray: bool=False):
         """ Load an image from disk. """
         image = cv2.imread(image_path)
         image = cv2.resize(image, (self.K_IMAGE_SIZE, self.K_IMAGE_SIZE))
+        if gray:
+            image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+            image = cv2.cvtColor(image, cv2.COLOR_GRAY2RGB)
+        else:
+            image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
         return self.convert_image(image)
 
     def convert_tensor_to_image(self, tensor):
@@ -76,6 +81,7 @@ class TransferNet:
         image = image.clip(0, 1)
         image *= 255
         image = image.astype(np.uint8)
+        image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
 
         return image
 
@@ -88,7 +94,11 @@ class TransferNet:
         content_features = self.get_features(content_tensor, self.vgg)
         style_features = self.get_features(style_tensor, self.vgg)
         style_grams = {layer: self.gram_matrix(style_features[layer]) for layer in style_features}
-        target_tensor = content_tensor.clone().requires_grad_(True).to(self.device)
+
+        gray_content = self.load_image("../input/octopus.jpg", gray=True)
+        g_image = np.zeros((self.K_IMAGE_SIZE, self.K_IMAGE_SIZE, 3), dtype=np.uint8)
+        gray_content = self.convert_image(g_image)
+        target_tensor = gray_content.clone().requires_grad_(True).to(self.device)
 
         # for displaying the target image, intermittently
         show_every = 250
