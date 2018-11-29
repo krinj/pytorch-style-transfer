@@ -5,7 +5,7 @@
 <ENTER DESCRIPTION HERE>
 """
 
-from transfer_net import TransferNet
+from logic.transfer_net import TransferNet
 
 __author__ = "Jakrin Juangbhanich"
 __email__ = "juangbhanich.k@gmail.com"

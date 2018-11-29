@@ -3,6 +3,7 @@
 """
 <ENTER DESCRIPTION HERE>
 """
+
 import cv2
 import torch
 from k_util.logger import Logger
@@ -19,6 +20,8 @@ class TransferNet:
     K_TORCH_GPU = "cuda"
     K_TORCH_CPU = "cpu"
     K_IMAGE_SIZE: int = 400
+    K_IMAGE_MEAN = (0.485, 0.456, 0.406)
+    K_IMAGE_SD = (0.229, 0.224, 0.225)
 
     def __init__(self):
 
@@ -35,8 +38,7 @@ class TransferNet:
 
         self.tensor_transform = transforms.Compose([
             transforms.ToTensor(),
-            transforms.Normalize((0.485, 0.456, 0.406),
-                                 (0.229, 0.224, 0.225))
+            transforms.Normalize(self.K_IMAGE_MEAN, self.K_IMAGE_SD)
         ])
 
         # weights for each style layer
@@ -77,7 +79,7 @@ class TransferNet:
         image = tensor.to(self.K_TORCH_CPU).clone().detach()
         image = image.numpy().squeeze()
         image = image.transpose(1, 2, 0)
-        image = image * np.array((0.229, 0.224, 0.225)) + np.array((0.485, 0.456, 0.406))
+        image = image * np.array(self.K_IMAGE_SD) + np.array(self.K_IMAGE_MEAN)
         image = image.clip(0, 1)
         image *= 255
         image = image.astype(np.uint8)
