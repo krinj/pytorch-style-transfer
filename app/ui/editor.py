@@ -8,6 +8,7 @@ from PyQt5.QtGui import QKeyEvent
 from PyQt5.QtWidgets import QMainWindow, QAction, QMenuBar, QDesktopWidget
 
 from ui.window import Window
+from ui.window_processing import WindowProcessing
 from ui.window_start import WindowStart
 
 __author__ = "Jakrin Juangbhanich"
@@ -21,8 +22,8 @@ class Editor(QMainWindow):
         self.title = 'Clustering GT Editor'
         self.setWindowTitle(self.title)
         self.initialize_menu_bar()
-        self.window_splash = WindowStart()
-        self.window_editor = WindowStart()
+        self.window_start = WindowStart(self.begin_transfer)
+        self.window_processing = WindowProcessing(self.show_splash)
         self.current_window: Window = None
         self.show_splash()
 
@@ -45,7 +46,12 @@ class Editor(QMainWindow):
         self.center_screen()
 
     def show_splash(self):
-        self.show_window(self.window_splash)
+        self.show_window(self.window_start)
+
+    def begin_transfer(self, content_image, style_image):
+        print("Begin Transfer")
+        self.window_processing.begin_style_transfer(content_image, style_image)
+        self.show_window(self.window_processing)
     #
     # def on_project_selected(self, project_name: str):
     #     print(f"Main Project Selected {project_name}")

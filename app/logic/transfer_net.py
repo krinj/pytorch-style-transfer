@@ -53,9 +53,18 @@ class TransferNet:
         self.content_weight = 1  # alpha
         self.style_weight = 1e6  # beta
 
+        # Declare the members.
+        self.content_features = None
+        self.style_features = None
+        self.style_grams = None
+        self.target_tensor = None
+        self.optimizer = None
+        self.current_step = 0
+        self.steps = 3000
+
         Logger.field("Torch Device", self.device)
 
-    def convert_image(self, image: np.ndarray):
+    def convert_image_to_tensor(self, image: np.ndarray):
         """ Converts a CV2/Numpy image into PyTorch format. """
         image_tensor = self.tensor_transform(image)
         image_tensor = image_tensor.unsqueeze(0)
@@ -65,13 +74,17 @@ class TransferNet:
     def load_image(self, image_path: str, gray: bool=False):
         """ Load an image from disk. """
         image = cv2.imread(image_path)
+        return self.prepare_image(image, gray)
+
+    def prepare_image(self, image: np.ndarray, gray: bool=False):
+        """ Prepare the image for processing via our network. """
         image = cv2.resize(image, (self.K_IMAGE_SIZE, self.K_IMAGE_SIZE))
         if gray:
             image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
             image = cv2.cvtColor(image, cv2.COLOR_GRAY2RGB)
         else:
             image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
-        return self.convert_image(image)
+        return self.convert_image_to_tensor(image)
 
     def convert_tensor_to_image(self, tensor):
         """ Display a tensor as an image. """
@@ -87,63 +100,61 @@ class TransferNet:
 
         return image
 
-    def process(self, content_image_path: str, style_image_path: str):
-        Logger.field("Processing Content", content_image_path)
-        Logger.field("Processing Style", style_image_path)
-        content_tensor = self.load_image(content_image_path)
-        style_tensor = self.load_image(style_image_path)
+    def prepare_network(self, content_image, style_image):
 
-        content_features = self.get_features(content_tensor, self.vgg)
-        style_features = self.get_features(style_tensor, self.vgg)
-        style_grams = {layer: self.gram_matrix(style_features[layer]) for layer in style_features}
+        content_tensor = self.prepare_image(content_image)
+        style_tensor = self.prepare_image(style_image)
 
-        gray_content = self.load_image("../input/octopus.jpg", gray=True)
-        g_image = np.zeros((self.K_IMAGE_SIZE, self.K_IMAGE_SIZE, 3), dtype=np.uint8)
-        gray_content = self.convert_image(g_image)
-        target_tensor = gray_content.clone().requires_grad_(True).to(self.device)
+        self.content_features = self.get_features(content_tensor, self.vgg)
+        self.style_features = self.get_features(style_tensor, self.vgg)
+        self.style_grams = {
+            layer: self.gram_matrix(self.style_features[layer]) for layer in self.style_features}
 
-        # for displaying the target image, intermittently
-        show_every = 250
-        optimizer = optim.Adam([target_tensor], lr=0.003)
-        steps = 3000
+        self.target_tensor = content_tensor.clone().requires_grad_(True).to(self.device)
 
-        for ii in range(1, steps + 1):
+        self.optimizer = optim.Adam([self.target_tensor], lr=0.003)
+        self.steps = 200
+        self.current_step = 0
 
-            # get the features from your target image
-            target_features = self.get_features(target_tensor, self.vgg)
+    def step(self):
 
-            # the content loss
-            content_loss = torch.mean((target_features['conv4_2'] - content_features['conv4_2']) ** 2)
+        # get the features from your target image
+        target_features = self.get_features(self.target_tensor, self.vgg)
 
-            # the style loss
-            # initialize the style loss to 0
-            style_loss = 0
-            # then add to it for each layer's gram matrix loss
-            for layer in self.style_weights:
-                # get the "target" style representation for the layer
-                target_feature = target_features[layer]
-                target_gram = self.gram_matrix(target_feature)
-                _, d, h, w = target_feature.shape
-                # get the "style" style representation
-                style_gram = style_grams[layer]
-                # the style loss for one layer, weighted appropriately
-                layer_style_loss = self.style_weights[layer] * torch.mean((target_gram - style_gram) ** 2)
-                # add to the style loss
-                style_loss += layer_style_loss / (d * h * w)
+        # the content loss
+        content_loss = torch.mean((target_features['conv4_2'] - self.content_features['conv4_2']) ** 2)
 
-            # calculate the *total* loss
-            total_loss = self.content_weight * content_loss + self.style_weight * style_loss
+        # the style loss
+        # initialize the style loss to 0
+        style_loss = 0
+        # then add to it for each layer's gram matrix loss
+        for layer in self.style_weights:
+            # get the "target" style representation for the layer
+            target_feature = target_features[layer]
+            target_gram = self.gram_matrix(target_feature)
+            _, d, h, w = target_feature.shape
+            # get the "style" style representation
+            style_gram = self.style_grams[layer]
+            # the style loss for one layer, weighted appropriately
+            layer_style_loss = self.style_weights[layer] * torch.mean((target_gram - style_gram) ** 2)
+            # add to the style loss
+            style_loss += layer_style_loss / (d * h * w)
 
-            # update your target image
-            optimizer.zero_grad()
-            total_loss.backward()
-            optimizer.step()
+        # calculate the *total* loss
+        total_loss = self.content_weight * content_loss + self.style_weight * style_loss
 
-            # display intermediate images and print the loss
-            if ii % show_every == 0:
-                out_image = self.convert_tensor_to_image(target_tensor)
-                cv2.imwrite(f"out_{ii}.png", out_image)
-                print('Total loss: ', total_loss.item())
+        # update your target image
+        self.optimizer.zero_grad()
+        total_loss.backward()
+        self.optimizer.step()
+        print('Total loss: ', total_loss.item())
+        self.current_step += 1
+
+        return self.current_step / self.steps
+
+    def get_current_target_image(self):
+        """ Get the current target image. """
+        return self.convert_tensor_to_image(self.target_tensor)
 
     def get_features(self, image, model, layers=None):
         """ Run an image forward through a model and get the features for
