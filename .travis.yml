@@ -1,0 +1,12 @@
+language: node_js
+node_js:
+  - "stable"
+cache:
+  directories:
+    - site/node_modules
+script:
+  - cd site
+  - npm test
+  - npm run build
+on:
+  branch: master
