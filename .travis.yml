@@ -18,6 +18,7 @@ deploy:
   access_key_id: $AWS_ACCESS_KEY
   secret_access_key: $AWS_SECRET_KEY
   bucket: $BUCKET_NAME
+  region: ap-southeast-2
   skip_cleanup: true
   local-dir: build
 
