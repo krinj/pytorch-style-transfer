@@ -5,8 +5,7 @@ cache:
   directories:
     - site/node_modules
 script:
-  - cd site
-  - npm test
-  - npm run build
+  - (cd site && npm test)
+  - (cd site && npm run build)
 on:
   branch: master
