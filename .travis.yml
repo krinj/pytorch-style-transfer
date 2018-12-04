@@ -17,7 +17,7 @@ deploy:
   provider: s3
   access_key_id: $AWS_ACCESS_KEY
   secret_access_key: $AWS_SECRET_KEY
-  bucket: $AWS_BUCKET_NAME
+  bucket: $BUCKET_NAME
   skip_cleanup: true
   local-dir: build
 
