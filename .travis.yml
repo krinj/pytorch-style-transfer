@@ -4,8 +4,10 @@ node_js:
 cache:
   directories:
     - site/node_modules
+before_install:
+  - cd site
 script:
-  - (cd site && npm test)
-  - (cd site && npm run build)
+  - npm test
+  - npm run build
 on:
   branch: master
