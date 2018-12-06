@@ -18,17 +18,24 @@ input[type="file"] {
 }
 
 .image-container-inner {
-    border-radius: 5px;
-    width: 94%;
-    height: 94%;
+    width: 96%;
+    height: 96%;
     background-color: black;
     margin: auto;
 }
 
+.image-container-inner:hover {
+    background-color: yellow;
+    cursor: pointer;
+}
+
 .image-container {
-    border-radius: 5px;
     width: 200px;
     height: 200px;
     border: 1px solid #567089;
     display: flex;
+}
+
+.rounded-corners {
+    border-radius: 5px;
 }

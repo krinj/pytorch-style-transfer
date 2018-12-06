@@ -77,11 +77,14 @@ class Viewer extends Component {
 				<br/>
 				<br/>
 
-				<div className="image-container">
-					<div className="image-container-inner">
-						<img src={this.state.file} alt={"Uploaded"} className="image-box"/>
+				<label className="no-margin">
+					<input type="file" onChange={this.onImageChange} accept=".png, .jpg, .jpeg"/>
+					<div className="image-container rounded-corners">
+						<div className="image-container-inner rounded-corners">
+							<img src={this.state.file} alt={"Uploaded"} className="image-box"/>
+						</div>
 					</div>
-				</div>
+				</label>
 
 			</div>
 			// <div>
