@@ -33,11 +33,6 @@ class Viewer extends Component {
 
 	sendRequest = () => {
 		let myData= {key1: 1000};
-		// let config = {
-		// 	headers: {
-		// 		'Content-Type': 'application/json',
-		// 	}
-		// };
 		axios.post(`https://xliyrr4cp4.execute-api.ap-southeast-2.amazonaws.com/default/requestStyleTransfer`, myData)
 			.then(this.getResponse)
 	};
@@ -46,10 +41,12 @@ class Viewer extends Component {
 		// POST to a test endpoint for demo purposes
 		console.log("Item dropped");
 		console.log(event);
-
-		this.setState({
-			file: URL.createObjectURL(event.target.files[0])
-		})
+		console.log(event.target.files.length);
+		if (event.target.files.length > 0) {
+			this.setState({
+				file: URL.createObjectURL(event.target.files[0])
+			});
+		}
 	};
 
 	render() {
@@ -65,56 +62,45 @@ class Viewer extends Component {
 		}
 
 		return (
-			<div className="container theme-showcase" role="main">
-
-				<div>Hello</div>
-				<div className="jumbotron bg-dark">
-					<h1>Theme example</h1>
-				</div>
-
-				<p>Template Runner</p>
-				<p>{this.state.message}</p>
-				<p>{`Clicks: ${this.state.value}`}</p>
-				<button type="button" className="btn btn-primary" onClick={this.sendRequest}>Primary</button>
-
-				{/*<br/>*/}
-				{/*<br/>*/}
-
-				{/*<label className="btn btn-primary no-margin">*/}
-					{/*<input type="file" onChange={this.onImageChange} accept=".png, .jpg, .jpeg"/>*/}
-					{/*Custom Upload*/}
-				{/*</label>*/}
-
-				<br/>
-				<br/>
-
-				<label className="no-margin">
-					<input type="file" onChange={this.onImageChange} accept=".png, .jpg, .jpeg"/>
-					<div className="image-container rounded-corners">
-						<div className="image-container-inner rounded-corners">
-							{imageContent}
+			<div className="container" role="main">
+				<div className="row">
+					<div className="col-12 highlight-test">
+						<div className="jumbotron bg-dark top-margin">
+							<h1>Style Transfer App</h1>
+							Do stuff.
 						</div>
 					</div>
-				</label>
+					<div className="col-12 highlight-test">Explaination</div>
+
+					<div className="col-sm-12 col-md-6 highlight-test flex">
+						{/*<h4 className="text-center">Content Image</h4>*/}
+						<div className="aspect-box">
+						<label className="aspect-content">
+							<input type="file" onChange={this.onImageChange} accept=".png, .jpg, .jpeg"/>
+							<div className="image-container rounded-corners">
+								<div className="image-container-inner rounded-corners">
+									{imageContent}
+								</div>
+							</div>
+						</label>
+						</div>
+					</div>
+
+					<div className="col-sm-12 col-md-6 highlight-test">Style Image</div>
+					<div className="col-12 highlight-test">Option to begin style transfer</div>
+				</div>
+
+				{/*<p>Template Runner</p>*/}
+				{/*<p>{this.state.message}</p>*/}
+				{/*<p>{`Clicks: ${this.state.value}`}</p>*/}
+				{/*<button type="button" className="btn btn-primary" onClick={this.sendRequest}>Primary</button>*/}
+
+				{/*<br/>*/}
+				{/*<br/>*/}
+
+
 
 			</div>
-			// <div>
-			// 	<div className="container theme-showcase" role="main">
-			//
-			// 		<!-- Main jumbotron for a primary marketing message or call to action -->
-			// 		<div className="jumbotron">
-			// 			<h1>Theme example</h1>
-			// 			<p>This is a template showcasing the optional theme stylesheet included in Bootstrap. Use it as a starting
-			// 				point to create something more unique by building on or modifying it.</p>
-			// 		</div>
-			//
-			// 		<p>Template Runner</p>
-			// 		<p>{this.state.message}</p>
-			// 		<p>{`Clicks: ${this.state.value}`}</p>
-			// 		<button type="button" className="btn btn-primary" onClick={this.doSomething}>Primary</button>
-			//
-			// 	</div>
-			// </div>
 		);
 	}
 }
