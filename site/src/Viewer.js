@@ -32,7 +32,7 @@ class Viewer extends Component {
 	};
 
 	sendRequest = () => {
-		let myData= {key1: 1000};
+		let myData = {key1: 1000};
 		axios.post(`https://xliyrr4cp4.execute-api.ap-southeast-2.amazonaws.com/default/requestStyleTransfer`, myData)
 			.then(this.getResponse)
 	};
@@ -54,7 +54,7 @@ class Viewer extends Component {
 		let imageContent;
 		if (this.state.file == null) {
 			imageContent =
-				<div className="btn btn-primary image-text">
+				<div className="btn btn-dark image-text">
 					Select an Image
 				</div>;
 		} else {
@@ -65,29 +65,47 @@ class Viewer extends Component {
 			<div className="container" role="main">
 				<div className="row">
 					<div className="col-12 highlight-test">
-						<div className="jumbotron bg-dark top-margin">
-							<h1>Style Transfer App</h1>
+						<div className="jumbotron bg-dark top-margin text-center">
+							<h1>STYLE TRANSFER</h1>
 							Do stuff.
 						</div>
 					</div>
-					<div className="col-12 highlight-test">Explaination</div>
+					<div className="col-12 highlight-test">
+						<p className="text-center lead">
+							This is a description of the style transfer app from Udacity.
+						</p>
+					</div>
 
-					<div className="col-sm-12 col-md-6 highlight-test flex">
-						{/*<h4 className="text-center">Content Image</h4>*/}
+					<div className="col-sm-12 col-md-6 highlight-test">
+						<div className="highlight-block">
+							<h5 className="no-margin top-margin">Content Image</h5>
+							Say something about the style box.
+						</div>
 						<div className="aspect-box">
-						<label className="aspect-content">
-							<input type="file" onChange={this.onImageChange} accept=".png, .jpg, .jpeg"/>
-							<div className="image-container rounded-corners">
-								<div className="image-container-inner rounded-corners">
-									{imageContent}
+							<label className="aspect-content">
+								<input type="file" onChange={this.onImageChange} accept=".png, .jpg, .jpeg"/>
+								<div className="image-container rounded-corners">
+									<div className="image-container-inner rounded-corners">
+										{imageContent}
+									</div>
 								</div>
-							</div>
-						</label>
+							</label>
 						</div>
 					</div>
 
 					<div className="col-sm-12 col-md-6 highlight-test">Style Image</div>
-					<div className="col-12 highlight-test">Option to begin style transfer</div>
+
+					<div className="col-12 highlight-test">
+						<div className="text-center v-margin">
+							<button type="button" className="btn btn-primary btn-lg btn-block">Begin Transfer</button>
+						</div>
+					</div>
+
+					<div className="col-12 highlight-test">
+						<div className="text-center footer-block">
+							Created by Jakrin Juangbhanich
+						</div>
+					</div>
 				</div>
 
 				{/*<p>Template Runner</p>*/}
@@ -97,7 +115,6 @@ class Viewer extends Component {
 
 				{/*<br/>*/}
 				{/*<br/>*/}
-
 
 
 			</div>

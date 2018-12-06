@@ -15,6 +15,11 @@ input[type="file"] {
     margin: auto;
 }
 
+.v-margin {
+    margin-bottom: 10px;
+    margin-top: 10px;
+}
+
 .flex {
     display: flex;
 }
@@ -75,11 +80,25 @@ input[type="file"] {
 }
 
 .highlight-test {
-    border: 1px solid red;
+    /*border: 1px solid #16171d;*/
 }
 
 .top-margin {
+    margin-top: 12px;
+}
+
+.highlight-block {
+    border-left: 2px solid white;
+    padding-left: 14px;
+}
+
+.footer-block {
+    border-top: 1px solid #4d5d6e;
+    padding-top: 10px;
     margin-top: 20px;
+    margin-bottom: 20px;
+    font-size: 0.9em;
+    color: #4d5d6e;
 }
 
 @media (min-width: 960px) {
