@@ -7,7 +7,8 @@ class Viewer extends Component {
 		super();
 		this.state = {
 			value: 0,
-			message: "Hello World!!"
+			message: "Hello World!!",
+			file: null
 		}
 	}
 
@@ -41,10 +42,14 @@ class Viewer extends Component {
 			.then(this.getResponse)
 	};
 
-	onDrop = (files) => {
+	onImageChange = (event) => {
 		// POST to a test endpoint for demo purposes
 		console.log("Item dropped");
-		console.log(files);
+		console.log(event);
+
+		this.setState({
+			file: URL.createObjectURL(event.target.files[0])
+		})
 	};
 
 	render() {
@@ -60,21 +65,19 @@ class Viewer extends Component {
 				<p>{this.state.message}</p>
 				<p>{`Clicks: ${this.state.value}`}</p>
 				<button type="button" className="btn btn-primary" onClick={this.sendRequest}>Primary</button>
+
 				<br/>
 				<br/>
+
 				<label className="btn btn-primary no-margin">
-					<input type="file" onChange={this.handleChange} accept=".png, .jpg, .jpeg"/>
+					<input type="file" onChange={this.onImageChange} accept=".png, .jpg, .jpeg"/>
 					Custom Upload
 				</label>
 
-				{/*<button type="button" className="btn btn-primary" onClick={this.sendRequest}>*/}
-					{/*Upload*/}
-					{/*<input type="file" onChange={this.handleChange} accept=".png, .jpg, .jpeg"/>*/}
-				{/*</button>*/}
+				<br/>
+				<br/>
 
-				{/*<span className="btn btn-primary">*/}
-						{/*Browse <input type="file"/>*/}
-				{/*</span>*/}
+				<img src={this.state.file} alt={"Uploaded"}/>
 
 			</div>
 			// <div>
