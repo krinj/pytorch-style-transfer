@@ -53,6 +53,17 @@ class Viewer extends Component {
 	};
 
 	render() {
+
+		let imageContent;
+		if (this.state.file == null) {
+			imageContent =
+				<div className="btn btn-primary image-text">
+					Select an Image
+				</div>;
+		} else {
+			imageContent = <img src={this.state.file} alt={"Uploaded"} className="image-box"/>;
+		}
+
 		return (
 			<div className="container theme-showcase" role="main">
 
@@ -66,13 +77,13 @@ class Viewer extends Component {
 				<p>{`Clicks: ${this.state.value}`}</p>
 				<button type="button" className="btn btn-primary" onClick={this.sendRequest}>Primary</button>
 
-				<br/>
-				<br/>
+				{/*<br/>*/}
+				{/*<br/>*/}
 
-				<label className="btn btn-primary no-margin">
-					<input type="file" onChange={this.onImageChange} accept=".png, .jpg, .jpeg"/>
-					Custom Upload
-				</label>
+				{/*<label className="btn btn-primary no-margin">*/}
+					{/*<input type="file" onChange={this.onImageChange} accept=".png, .jpg, .jpeg"/>*/}
+					{/*Custom Upload*/}
+				{/*</label>*/}
 
 				<br/>
 				<br/>
@@ -81,7 +92,7 @@ class Viewer extends Component {
 					<input type="file" onChange={this.onImageChange} accept=".png, .jpg, .jpeg"/>
 					<div className="image-container rounded-corners">
 						<div className="image-container-inner rounded-corners">
-							<img src={this.state.file} alt={"Uploaded"} className="image-box"/>
+							{imageContent}
 						</div>
 					</div>
 				</label>

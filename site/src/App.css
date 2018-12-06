@@ -22,11 +22,16 @@ input[type="file"] {
     height: 96%;
     background-color: black;
     margin: auto;
+    display: flex;
 }
 
 .image-container-inner:hover {
     background-color: yellow;
     cursor: pointer;
+}
+
+.image-text {
+    margin: auto;
 }
 
 .image-container-inner:active {
