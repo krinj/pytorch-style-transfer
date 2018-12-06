@@ -29,6 +29,11 @@ input[type="file"] {
     cursor: pointer;
 }
 
+.image-container-inner:active {
+    background-color: red;
+    cursor: pointer;
+}
+
 .image-container {
     width: 200px;
     height: 200px;
