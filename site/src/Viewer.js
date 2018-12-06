@@ -1,6 +1,5 @@
 import React, {Component} from "react";
 import axios from "axios";
-import ReactDropzone from 'react-dropzone';
 
 class Viewer extends Component {
 
@@ -61,12 +60,21 @@ class Viewer extends Component {
 				<p>{this.state.message}</p>
 				<p>{`Clicks: ${this.state.value}`}</p>
 				<button type="button" className="btn btn-primary" onClick={this.sendRequest}>Primary</button>
+				<br/>
+				<br/>
+				<label className="btn btn-primary no-margin">
+					<input type="file" onChange={this.handleChange} accept=".png, .jpg, .jpeg"/>
+					Custom Upload
+				</label>
 
-				<ReactDropzone onDrop={this.onDrop}>
-					Drop some good shit here.
-				</ReactDropzone>
+				{/*<button type="button" className="btn btn-primary" onClick={this.sendRequest}>*/}
+					{/*Upload*/}
+					{/*<input type="file" onChange={this.handleChange} accept=".png, .jpg, .jpeg"/>*/}
+				{/*</button>*/}
 
-				<input type="file" onChange={this.handleChange} accept=".png, .jpg, .jpeg"/>
+				{/*<span className="btn btn-primary">*/}
+						{/*Browse <input type="file"/>*/}
+				{/*</span>*/}
 
 			</div>
 			// <div>
