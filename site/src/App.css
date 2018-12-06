@@ -10,3 +10,8 @@ input[type="file"] {
 .no-margin {
     margin: 0;
 }
+
+.image-box {
+    width: 200px;
+    height: 200px;
+}
