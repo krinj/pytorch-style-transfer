@@ -1,5 +1,6 @@
 import React, {Component} from "react";
 import axios from "axios";
+import ReactDropzone from 'react-dropzone';
 
 class Viewer extends Component {
 
@@ -41,6 +42,12 @@ class Viewer extends Component {
 			.then(this.getResponse)
 	};
 
+	onDrop = (files) => {
+		// POST to a test endpoint for demo purposes
+		console.log("Item dropped");
+		console.log(files);
+	};
+
 	render() {
 		return (
 			<div className="container theme-showcase" role="main">
@@ -54,6 +61,10 @@ class Viewer extends Component {
 				<p>{this.state.message}</p>
 				<p>{`Clicks: ${this.state.value}`}</p>
 				<button type="button" className="btn btn-primary" onClick={this.sendRequest}>Primary</button>
+
+				<ReactDropzone onDrop={this.onDrop}>
+					Drop some good shit here.
+				</ReactDropzone>
 
 			</div>
 			// <div>
