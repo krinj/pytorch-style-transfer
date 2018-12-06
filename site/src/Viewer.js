@@ -66,6 +66,8 @@ class Viewer extends Component {
 					Drop some good shit here.
 				</ReactDropzone>
 
+				<input type="file" onChange={this.handleChange} accept=".png, .jpg, .jpeg"/>
+
 			</div>
 			// <div>
 			// 	<div className="container theme-showcase" role="main">
