@@ -12,6 +12,23 @@ input[type="file"] {
 }
 
 .image-box {
+    object-fit: cover;
+    width: 100%;
+    height: 100%;
+}
+
+.image-container-inner {
+    border-radius: 5px;
+    width: 94%;
+    height: 94%;
+    background-color: black;
+    margin: auto;
+}
+
+.image-container {
+    border-radius: 5px;
     width: 200px;
     height: 200px;
+    border: 1px solid #567089;
+    display: flex;
 }

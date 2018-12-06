@@ -77,7 +77,11 @@ class Viewer extends Component {
 				<br/>
 				<br/>
 
-				<img src={this.state.file} alt={"Uploaded"} className="img-thumbnail image-box"/>
+				<div className="image-container">
+					<div className="image-container-inner">
+						<img src={this.state.file} alt={"Uploaded"} className="image-box"/>
+					</div>
+				</div>
 
 			</div>
 			// <div>
