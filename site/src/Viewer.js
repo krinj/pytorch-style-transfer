@@ -1,10 +1,12 @@
 import React, {Component} from "react";
 import axios from "axios";
+import "react-responsive-carousel/lib/styles/carousel.min.css";
+import { Carousel } from 'react-responsive-carousel';
 // import "./images/style_oil.png"
 
-// import imageOil from './images/style_oil.png';
+import imageOil from './images/style_oil.png';
 // import imageHokusai from './images/style_hokusai.png';
-// import imageMarvel from './images/style_marvel.png';
+import imageMarvel from './images/style_marvel.png';
 import imageWaterColor from './images/style_watercolor.png';
 
 class Viewer extends Component {
@@ -106,11 +108,27 @@ class Viewer extends Component {
 						</div>
 						<div className="aspect-box">
 							<label className="aspect-content">
-								<input type="file" onChange={this.onImageChange} accept=".png, .jpg, .jpeg"/>
+								{/*<input type="file" onChange={this.onImageChange} accept=".png, .jpg, .jpeg"/>*/}
 								<div className="image-container rounded-corners">
-									<div className="image-container-inner rounded-corners">
-										<img src={imageWaterColor} alt={"Uploaded"} className="image-box"/>
-									</div>
+									{/*<div className="image-container-inner rounded-corners">*/}
+
+										<Carousel width={320} showThumbs={false} showStatus={false} showIndicators={false} infiniteLoop={true}
+															className="image-container-inner rounded-corners">
+											<div>
+												<img src={imageWaterColor} />
+												{/*<p className="legend">Legend 1</p>*/}
+											</div>
+											<div>
+												<img src={imageMarvel} />
+												{/*<p className="legend">Legend 2</p>*/}
+											</div>
+											<div>
+												<img src={imageOil} />
+												{/*<p className="legend">Legend 3</p>*/}
+											</div>
+										</Carousel>
+
+									{/*</div>*/}
 								</div>
 							</label>
 						</div>
