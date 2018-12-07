@@ -66,7 +66,7 @@ class Viewer extends Component {
 					Select an Image
 				</div>;
 		} else {
-			imageContent = <img src={this.state.file} alt={"Uploaded"} className="image-box"/>;
+			imageContent = <img src={this.state.file} alt={"Uploaded"} className="rounded-corners image-box"/>;
 		}
 
 		return (
@@ -112,18 +112,19 @@ class Viewer extends Component {
 								<div className="image-container rounded-corners">
 									{/*<div className="image-container-inner rounded-corners">*/}
 
-										<Carousel width={320} showThumbs={false} showStatus={false} showIndicators={false} infiniteLoop={true}
+										<Carousel showThumbs={false} showStatus={false} showIndicators={false} swipeScrollTolerance={50}
+															infiniteLoop={true}
 															className="image-container-inner rounded-corners">
 											<div>
-												<img src={imageWaterColor} alt={"Style1"}/>
+												<img src={imageWaterColor} alt={"Style1"} className="image-box rounded-corners"/>
 												{/*<p className="legend">Legend 1</p>*/}
 											</div>
 											<div>
-												<img src={imageMarvel} alt={"Style2"}/>
+												<img src={imageMarvel} alt={"Style2"} className="image-box rounded-corners"/>
 												{/*<p className="legend">Legend 2</p>*/}
 											</div>
 											<div>
-												<img src={imageOil} alt={"Style3"}/>
+												<img src={imageOil} alt={"Style3"} className="image-box rounded-corners"/>
 												{/*<p className="legend">Legend 3</p>*/}
 											</div>
 										</Carousel>
