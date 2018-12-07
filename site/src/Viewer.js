@@ -115,15 +115,15 @@ class Viewer extends Component {
 										<Carousel width={320} showThumbs={false} showStatus={false} showIndicators={false} infiniteLoop={true}
 															className="image-container-inner rounded-corners">
 											<div>
-												<img src={imageWaterColor} />
+												<img src={imageWaterColor} alt={"Style1"}/>
 												{/*<p className="legend">Legend 1</p>*/}
 											</div>
 											<div>
-												<img src={imageMarvel} />
+												<img src={imageMarvel} alt={"Style2"}/>
 												{/*<p className="legend">Legend 2</p>*/}
 											</div>
 											<div>
-												<img src={imageOil} />
+												<img src={imageOil} alt={"Style3"}/>
 												{/*<p className="legend">Legend 3</p>*/}
 											</div>
 										</Carousel>
