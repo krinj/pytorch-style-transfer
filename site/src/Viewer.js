@@ -1,5 +1,11 @@
 import React, {Component} from "react";
 import axios from "axios";
+// import "./images/style_oil.png"
+
+// import imageOil from './images/style_oil.png';
+// import imageHokusai from './images/style_hokusai.png';
+// import imageMarvel from './images/style_marvel.png';
+import imageWaterColor from './images/style_watercolor.png';
 
 class Viewer extends Component {
 
@@ -12,14 +18,14 @@ class Viewer extends Component {
 		}
 	}
 
-	doSomething = () => {
-		console.log(`DoSomething ${this.state.value}`);
-		console.log(this);
-
-		const newState = {...this.state};
-		newState.value += 1;
-		this.setState(newState);
-	};
+	// doSomething = () => {
+	// 	console.log(`DoSomething ${this.state.value}`);
+	// 	console.log(this);
+	//
+	// 	const newState = {...this.state};
+	// 	newState.value += 1;
+	// 	this.setState(newState);
+	// };
 
 	getResponse = (res) => {
 		console.log(res);
@@ -93,7 +99,22 @@ class Viewer extends Component {
 						</div>
 					</div>
 
-					<div className="col-sm-12 col-md-6 highlight-test">Style Image</div>
+					<div className="col-sm-12 col-md-6 highlight-test">
+						<div className="highlight-block">
+							<h5 className="no-margin top-margin">Style Image</h5>
+							Say something about the style box.
+						</div>
+						<div className="aspect-box">
+							<label className="aspect-content">
+								<input type="file" onChange={this.onImageChange} accept=".png, .jpg, .jpeg"/>
+								<div className="image-container rounded-corners">
+									<div className="image-container-inner rounded-corners">
+										<img src={imageWaterColor} alt={"Uploaded"} className="image-box"/>
+									</div>
+								</div>
+							</label>
+						</div>
+					</div>
 
 					<div className="col-12 highlight-test">
 						<div className="text-center v-margin">
