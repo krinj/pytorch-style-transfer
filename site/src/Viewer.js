@@ -8,8 +8,6 @@ import imageOil from './images/style_oil.png';
 // import imageHokusai from './images/style_hokusai.png';
 import imageMarvel from './images/style_marvel.png';
 import imageWaterColor from './images/style_watercolor.png';
-
-import base64Img from 'base64-img';
 import { withRouter } from "react-router-dom";
 
 class Viewer extends Component {
