@@ -9,6 +9,9 @@ import imageOil from './images/style_oil.png';
 import imageMarvel from './images/style_marvel.png';
 import imageWaterColor from './images/style_watercolor.png';
 
+import base64Img from 'base64-img';
+import { withRouter } from "react-router-dom";
+
 class Viewer extends Component {
 
 	constructor() {
@@ -16,7 +19,8 @@ class Viewer extends Component {
 		this.state = {
 			value: 0,
 			message: "Hello World!!",
-			file: null
+			file: null,
+			fileUrl: null
 		}
 	}
 
@@ -37,12 +41,30 @@ class Viewer extends Component {
 		newState.value = res.data.k2;
 		newState.message = res.data.k1;
 		this.setState(newState);
+
+		let id = res.data.id;
+		this.props.history.push(`/display?id=${id}`);
+	};
+
+	getBase64Result = (e) => {
+		console.log("Got B64");
+		console.log(e.target.result);
+
+		let myData = {
+			key1: 1000,
+			fileName: this.state.file.name,
+			fileData: e.target.result
+		};
+
+		axios.post(`https://xliyrr4cp4.execute-api.ap-southeast-2.amazonaws.com/default/requestStyleTransfer`, myData)
+			.then(this.getResponse);
 	};
 
 	sendRequest = () => {
-		let myData = {key1: 1000};
-		axios.post(`https://xliyrr4cp4.execute-api.ap-southeast-2.amazonaws.com/default/requestStyleTransfer`, myData)
-			.then(this.getResponse)
+		// this.props.history.push("/display?id=1234");
+		let fileReader = new FileReader();
+		fileReader.addEventListener("load", this.getBase64Result);
+		fileReader.readAsDataURL(this.state.file);
 	};
 
 	onImageChange = (event) => {
@@ -52,7 +74,8 @@ class Viewer extends Component {
 		console.log(event.target.files.length);
 		if (event.target.files.length > 0) {
 			this.setState({
-				file: URL.createObjectURL(event.target.files[0])
+				file: event.target.files[0],
+				fileUrl: URL.createObjectURL(event.target.files[0])
 			});
 		}
 	};
@@ -66,7 +89,7 @@ class Viewer extends Component {
 					Select an Image
 				</div>;
 		} else {
-			imageContent = <img src={this.state.file} alt={"Uploaded"} className="rounded-corners image-box"/>;
+			imageContent = <img src={this.state.fileUrl} alt={"Uploaded"} className="rounded-corners image-box"/>;
 		}
 
 		return (
@@ -137,7 +160,9 @@ class Viewer extends Component {
 
 					<div className="col-12 highlight-test">
 						<div className="text-center v-margin">
-							<button type="button" className="btn btn-primary btn-lg btn-block">Begin Transfer</button>
+							<button type="button" className="btn btn-primary btn-lg btn-block" onClick={this.sendRequest}>
+								Begin Transfer
+							</button>
 						</div>
 					</div>
 
@@ -162,4 +187,4 @@ class Viewer extends Component {
 	}
 }
 
-export default Viewer;
+export default withRouter(Viewer);
