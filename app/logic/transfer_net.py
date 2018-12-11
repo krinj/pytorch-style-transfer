@@ -113,7 +113,7 @@ class TransferNet:
         self.target_tensor = content_tensor.clone().requires_grad_(True).to(self.device)
 
         self.optimizer = optim.Adam([self.target_tensor], lr=0.003)
-        self.steps = 200
+        self.steps = 3000
         self.current_step = 0
 
     def step(self):

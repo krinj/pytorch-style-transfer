@@ -106,3 +106,17 @@ input[type="file"] {
         max-width: 640px;
     }
 }
+
+.loader {
+    border: 3px solid #4c6282; /* Light grey */
+    border-top: 3px solid #64b3e8; /* Blue */
+    border-radius: 50%;
+    width: 42px;
+    height: 42px;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}

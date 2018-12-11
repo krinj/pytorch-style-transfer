@@ -6,3 +6,5 @@ input/
 output/
 
 *.pyc
+
+app/miniconda\.sh
