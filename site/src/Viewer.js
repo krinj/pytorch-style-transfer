@@ -58,10 +58,63 @@ class Viewer extends Component {
 			.then(this.getResponse);
 	};
 
+	downscaleImage = (e) => {
+		console.log("Downscaling the image...");
+
+		let img = document.createElement("img");
+		img.onload = () => {
+			let canvas = document.createElement('canvas');
+			let context = canvas.getContext("2d");
+			context.drawImage(img, 0, 0);
+
+			let MAX_WIDTH = 400;
+			let MAX_HEIGHT = 400;
+			let width = img.width;
+			let height = img.height;
+
+			if (width > height) {
+				if (width > MAX_WIDTH) {
+					height *= MAX_WIDTH / width;
+					width = MAX_WIDTH;
+				}
+			} else {
+				if (height > MAX_HEIGHT) {
+					width *= MAX_HEIGHT / height;
+					height = MAX_HEIGHT;
+				}
+			}
+
+			canvas.width = width;
+			canvas.height = height;
+
+			context = canvas.getContext("2d");
+			context.drawImage(img, 0, 0, width, height);
+
+			let dataUrl = canvas.toDataURL();
+
+			console.log("Got B64");
+			console.log(dataUrl);
+
+			let myData = {
+				fileName: this.state.file.name,
+				fileData: dataUrl
+			};
+
+			axios.post(`https://xliyrr4cp4.execute-api.ap-southeast-2.amazonaws.com/default/requestStyleTransfer`, myData)
+				.then(this.getResponse);
+
+			// console.log(dataUrl);
+			// let fileReader = new FileReader();
+			// fileReader.addEventListener("load", this.getBase64Result);
+			// fileReader.readAsDataURL(dataUrl);
+		};
+		img.src = e.target.result;
+	};
+
 	sendRequest = () => {
 		// this.props.history.push("/display?id=1234");
 		let fileReader = new FileReader();
-		fileReader.addEventListener("load", this.getBase64Result);
+		fileReader.addEventListener("load", this.downscaleImage);
 		fileReader.readAsDataURL(this.state.file);
 	};
 
