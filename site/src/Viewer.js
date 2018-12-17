@@ -58,8 +58,11 @@ class Viewer extends Component {
 			.then(this.getResponse);
 	};
 
-	downscaleImage = (e) => {
+	downscaleImage = (e, styleImage) => {
+
 		console.log("Downscaling the image...");
+		console.log("Got Style Image " + styleImage);
+		console.log(styleImage);
 
 		let img = document.createElement("img");
 		img.onload = () => {
@@ -96,8 +99,10 @@ class Viewer extends Component {
 			console.log(dataUrl);
 
 			let myData = {
-				fileName: this.state.file.name,
-				fileData: dataUrl
+				contentName: this.state.file.name,
+				contentData: dataUrl,
+				styleName: imageOil,
+				styleData: styleImage
 			};
 
 			axios.post(`https://xliyrr4cp4.execute-api.ap-southeast-2.amazonaws.com/default/requestStyleTransfer`, myData)
@@ -111,11 +116,41 @@ class Viewer extends Component {
 		img.src = e.target.result;
 	};
 
-	sendRequest = () => {
-		// this.props.history.push("/display?id=1234");
+	sendUploadedImage = (styleImage) => {
+
 		let fileReader = new FileReader();
-		fileReader.addEventListener("load", this.downscaleImage);
+		fileReader.addEventListener("load", (e) => {this.downscaleImage(e, styleImage)});
 		fileReader.readAsDataURL(this.state.file);
+	};
+
+	sendRequest = () => {
+		console.log(imageOil);
+		let img = document.createElement("img");
+		// img.addEventListener("load", (e) => {this.handleStyleImage(e, img)});
+		img.onload = () => {this.handleStyleImage(img)};
+		img.src = imageOil;
+		console.log(img);
+
+	};
+
+	handleStyleImage = (img) => {
+
+		console.log("handleStyleImage");
+
+		let canvas = document.createElement('canvas');
+		let context = canvas.getContext("2d");
+
+		context.drawImage(img, 0, 0);
+		const width = img.width;
+		const height = img.height;
+
+		canvas.width = width;
+		canvas.height = height;
+		context = canvas.getContext("2d");
+		context.drawImage(img, 0, 0, width, height);
+
+		let dataUrl = canvas.toDataURL();
+		this.sendUploadedImage(dataUrl);
 	};
 
 	onImageChange = (event) => {

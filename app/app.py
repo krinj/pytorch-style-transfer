@@ -11,6 +11,8 @@ import time
 import boto3
 import cv2
 
+from logic.transfer_net import TransferNet
+
 __author__ = "Jakrin Juangbhanich"
 __email__ = "juangbhanich.k@gmail.com"
 __version__ = "0.0.0"
@@ -21,6 +23,8 @@ K_AWS_SECRET_KEY = "AWS_SECRET_ACCESS_KEY"
 
 if __name__ == "__main__":
     print("Running Style Transfer Service")
+
+    net = TransferNet()
 
     # ===================================================================================================
     # Check AWS Credentials.
@@ -75,33 +79,43 @@ if __name__ == "__main__":
 
     job_id = message_data["id"]
     content_image_url = message_data["content_url"]
+    style_image_url = message_data["style_url"]
 
     # Delete the message from SQS.
-    sqs.delete_message(
-        QueueUrl=queue_url,
-        ReceiptHandle=receipt_handle
-    )
+    # sqs.delete_message(
+    #     QueueUrl=queue_url,
+    #     ReceiptHandle=receipt_handle
+    # )
 
     print(f"Message Deleted from SQS: {receipt_handle}")
-
     print(f"Job ID: {job_id}")
     print(f"Content Image: {content_image_url}")
+    print(f"Style Image: {style_image_url}")
 
     s3 = boto3.resource('s3')
     BUCKET_NAME = 'krinj-style-transfer-data'
+
     s3_key = content_image_url.split(f"{BUCKET_NAME}/")[-1]
-    local_path = s3_key.split("/")[-1]
-    print(f"Loading from: {s3_key} to {local_path}")
-    s3.Bucket(BUCKET_NAME).download_file(s3_key, local_path)
+    content_local_path = s3_key.split("/")[-1]
+    print(f"Loading from: {s3_key} to {content_local_path}")
+    s3.Bucket(BUCKET_NAME).download_file(s3_key, content_local_path)
+    print("Success")
+
+    s3_key = style_image_url.split(f"{BUCKET_NAME}/")[-1]
+    style_local_path = s3_key.split("/")[-1]
+    print(f"Loading from: {s3_key} to {style_local_path}")
+    s3.Bucket(BUCKET_NAME).download_file(s3_key, style_local_path)
     print("Success")
 
     # ===================================================================================================
     # Process the image.
     # ===================================================================================================
 
-    content_image = cv2.imread(local_path)
+    content_image = cv2.imread(content_local_path)
+    style_image = cv2.imread(style_local_path)
+
     target_image = cv2.cvtColor(content_image, cv2.COLOR_BGR2GRAY)
-    target_image = cv2.cvtColor(target_image, cv2.COLOR_GRAY2BGR)
+    # target_image = cv2.cvtColor(target_image, cv2.COLOR_GRAY2BGR)
 
     # ===================================================================================================
     # Update the progress.
@@ -110,14 +124,16 @@ if __name__ == "__main__":
     # Get the DDB table.
     dynamodb = boto3.resource('dynamodb')
     table = dynamodb.Table('style-transfer-table')
+    net.prepare_network(content_image, style_image, 10)
 
-    progress = 0
-    saved_progress = progress
-    while progress < 100:
-        time.sleep(1)
-        progress += 1
+    saved_progress = 0
+
+    while True:
+
+        progress = int(100 * net.step())
 
         if progress != saved_progress:
+            saved_progress = progress
             table.update_item(
                 Key={
                     'job_id': job_id
@@ -128,6 +144,11 @@ if __name__ == "__main__":
                 }
             )
             print(f"Updated Progress: {progress}")
+
+        if progress == 100:
+            break
+
+    target_image = net.get_current_target_image()
 
     # ===================================================================================================
     # Process is complete.

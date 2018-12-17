@@ -60,7 +60,7 @@ class TransferNet:
         self.target_tensor = None
         self.optimizer = None
         self.current_step = 0
-        self.steps = 3000
+        self.steps = 10
 
         Logger.field("Torch Device", self.device)
 
@@ -100,7 +100,7 @@ class TransferNet:
 
         return image
 
-    def prepare_network(self, content_image, style_image):
+    def prepare_network(self, content_image, style_image, steps: int=3000):
 
         content_tensor = self.prepare_image(content_image)
         style_tensor = self.prepare_image(style_image)
@@ -113,8 +113,11 @@ class TransferNet:
         self.target_tensor = content_tensor.clone().requires_grad_(True).to(self.device)
 
         self.optimizer = optim.Adam([self.target_tensor], lr=0.003)
-        self.steps = 3000
+        self.steps = steps
         self.current_step = 0
+
+    def process(self, content_image, style_image):
+        pass
 
     def step(self):
 

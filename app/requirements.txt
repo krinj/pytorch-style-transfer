@@ -1,2 +1,6 @@
 boto3
 opencv-python
+torch
+torchvision
+k-util
+k-vision

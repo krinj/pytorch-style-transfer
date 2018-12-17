@@ -8,8 +8,14 @@ WORKDIR /app
 ADD requirements.txt /app
 RUN pip install -r requirements.txt
 
+# Add the command to load VGG16.
+ADD cmd_load_vgg.py /app
+RUN python cmd_load_vgg.py
+
 # Add the actual application.
 ADD app.py /app
+ADD logic/* /app/logic/
+ADD __init__.py /app
 
 # Run app_server.py when the container launches
 CMD ["python", "app.py"]
