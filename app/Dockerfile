@@ -20,9 +20,3 @@ ADD __init__.py /app
 # Run app_server.py when the container launches
 CMD ["python", "app.py"]
 
-# Install AWS Tools.
-
-# Copy the scripts.
-
-# Create the run command.
-
