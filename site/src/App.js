@@ -5,8 +5,8 @@ import "./custom.css"
 import './App.css';
 import { BrowserRouter as Router, Route } from "react-router-dom";
 
-import Viewer from "./Viewer";
-import Display from "./Display";
+import Viewer from "./components/LandingPage";
+import Display from "./components/StatusPage";
 
 
 class App extends Component {

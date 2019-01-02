@@ -3,8 +3,9 @@ import {withRouter} from "react-router-dom";
 import queryString from "query-string";
 import axios from "axios/index";
 import {Progress} from "reactstrap";
+import withPageLayout from "./hoc/withPageLayout";
 
-class Display extends Component {
+class StatusPage extends Component {
 
 	constructor() {
 		super();
@@ -56,6 +57,7 @@ class Display extends Component {
 	};
 
 	getBodyContent = () => {
+
 		console.log("Progress: " + this.state.progress);
 		console.log("Exists: " + this.state.exists);
 		console.log("Result URL: " + this.state.resultImage);
@@ -85,7 +87,7 @@ class Display extends Component {
 			imageSection = (
 				<div className="aspect-box">
 					<label className="aspect-content">
-						<input type="file" onChange={this.onImageChange} accept=".png, .jpg, .jpeg"/>
+						<input type="file" onChange={this.onContentImageChanged} accept=".png, .jpg, .jpeg"/>
 						<div className="image-container rounded-corners">
 							<div className="image-container-inner rounded-corners">
 								<img src={this.state.resultImage} alt={"Uploaded"} className="rounded-corners image-box"/>
@@ -115,7 +117,6 @@ class Display extends Component {
 	render() {
 
 		let id = this.state.id;
-
 		if (this.state.firstPing === false) {
 			this.getStats();
 		}
@@ -124,35 +125,19 @@ class Display extends Component {
 		// this.getStats(id);
 		let bodyContent = this.getBodyContent();
 		return (
-
-			<div className="container" role="main">
-				<div className="row">
-					<div className="col-12 highlight-test">
-						<div className="jumbotron bg-dark top-margin text-center">
-							<h1>STYLE TRANSFER</h1>
-							Do stuff.
+					<>
+						<div className="col-12 highlight-test">
+							<p className="text-center lead">
+								Checking the content of ID: {id}
+							</p>
 						</div>
-					</div>
 
-					<div className="col-12 highlight-test">
-						<p className="text-center lead">
-							Checking the content of ID: {id}
-						</p>
-					</div>
-
-					<div className="col-12 highlight-test">
-						{bodyContent}
-					</div>
-
-					<div className="col-12 highlight-test">
-						<div className="text-center footer-block">
-							Created by Jakrin Juangbhanich
+						<div className="col-12 highlight-test">
+							{bodyContent}
 						</div>
-					</div>
-				</div>
-			</div>
+					</>
 		);
 	}
 }
 
-export default withRouter(Display);
+export default withRouter(withPageLayout(StatusPage));
