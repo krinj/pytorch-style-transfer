@@ -1,6 +1,6 @@
 #!/bin/sh
 
-docker run -it \
+nvidia-docker run -it \
     -e AWS_ACCESS_KEY_ID=<REDACTED> \
     -e AWS_SECRET_ACCESS_KEY=<REDACTED> \
     -e AWS_DEFAULT_REGION=ap-southeast-2 \
