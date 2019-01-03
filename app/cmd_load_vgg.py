@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 """
-<ENTER DESCRIPTION HERE>
+Preload the VGG model (for the docker build).
 """
 
 from torchvision import models

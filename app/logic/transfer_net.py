@@ -76,9 +76,35 @@ class TransferNet:
         image = cv2.imread(image_path)
         return self.prepare_image(image, gray)
 
+    @staticmethod
+    def transform_aspect(image: np.ndarray):
+        """ Transform the image to a 1:1 ratio. """
+        width = image.shape[1]
+        height = image.shape[0]
+
+        if width == height:
+            # Already square.
+            return image
+
+        short_side = min(width, height)
+        long_side = max(width, height)
+        excess = (long_side - short_side) // 2
+
+        start_point = excess
+        end_point = excess + short_side
+
+        if width > height:
+            return image[:, start_point:end_point]
+        else:
+            return image[start_point:end_point, :]
+
     def prepare_image(self, image: np.ndarray, gray: bool=False):
         """ Prepare the image for processing via our network. """
+
+        # If the image is not square aspect, then crop in.
+        image = self.transform_aspect(image)
         image = cv2.resize(image, (self.K_IMAGE_SIZE, self.K_IMAGE_SIZE))
+
         if gray:
             image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
             image = cv2.cvtColor(image, cv2.COLOR_GRAY2RGB)
@@ -116,8 +142,17 @@ class TransferNet:
         self.steps = steps
         self.current_step = 0
 
-    def process(self, content_image, style_image):
-        pass
+    def process(self, content_image_path: str, style_image_path: str, epochs: int):
+        # Prepare the images.
+        content_image = cv2.imread(content_image_path)
+        style_image = cv2.imread(style_image_path)
+        self.prepare_network(content_image, style_image, epochs)
+
+        # Loop and step the network until it is complete.
+        while True:
+            progress = int(100 * self.step())
+            if progress == 100:
+                break
 
     def step(self):
 
@@ -150,10 +185,12 @@ class TransferNet:
         self.optimizer.zero_grad()
         total_loss.backward()
         self.optimizer.step()
-        print('Total loss: ', total_loss.item())
+        Logger.field('Total loss', total_loss.item())
         self.current_step += 1
 
-        return self.current_step / self.steps
+        progress = self.current_step / self.steps
+        Logger.field("Progress", progress)
+        return progress
 
     def get_current_target_image(self):
         """ Get the current target image. """
