@@ -56,51 +56,80 @@ class StatusPage extends Component {
 		}
 	};
 
+	getHeaderText = () => {
+		if (this.state.firstPing) {
+			if (this.state.exists) {
+				if (this.state.progress < 100) {
+					if (this.state.progress === 0) {
+						// Still booting up the containers.
+						return "Provisioning Containers";
+					} else {
+						// Container is working.
+						return "Rendering";
+					}
+				} else {
+					// Content has finished.
+					return "Transfer Complete";
+				}
+			} else {
+				// Job doesn't exist.
+				return "Content Not Found";
+			}
+		} else {
+			// Load the job details.
+			return "Checking Status";
+		}
+	};
+
 	getBodyContent = () => {
 
 		console.log("Progress: " + this.state.progress);
 		console.log("Exists: " + this.state.exists);
 		console.log("Result URL: " + this.state.resultImage);
 
-		let contentHeading = null;
 		let progressSection = null;
 		let imageSection = null;
 
-		if (this.state.exists) {
-			if (this.state.progress < 100) {
-				if (this.state.progress === 0) {
-					contentHeading = <p className="text-center lead">Provisioning Containers</p>;
-					progressSection = <div className="auto-margin loader"/>;
-				} else {
-					contentHeading = <p className="text-center lead">Content Rendering</p>;
-					progressSection = <Progress animated value={this.state.progress}/>
+		if (this.state.firstPing) {
+			if (this.state.exists) {
+				if (this.state.progress < 100) {
+					if (this.state.progress === 0) {
+						// Still booting up the containers.
+						progressSection = <div className="auto-margin loader"/>;
+					} else {
+						// Container is working.
+						progressSection = <Progress animated value={this.state.progress}/>
+					}
 				}
-			} else {
-				contentHeading = <p className="text-center lead">Content Rendered</p>;
 			}
 		} else {
-			contentHeading = <p className="text-center lead">Content Not Found</p>;
+			progressSection = <div className="auto-margin loader"/>;
 		}
 
 		if (this.state.exists && this.state.progress === 100 && this.state.resultImage !== null)
 		{
 			imageSection = (
-				<div className="aspect-box">
-					<label className="aspect-content">
-						<input type="file" onChange={this.onContentImageChanged} accept=".png, .jpg, .jpeg"/>
-						<div className="image-container rounded-corners">
-							<div className="image-container-inner rounded-corners">
-								<img src={this.state.resultImage} alt={"Uploaded"} className="rounded-corners image-box"/>
+				<>
+					<div className="aspect-box">
+						<label className="aspect-content">
+							<div className="image-container rounded-corners">
+								<div className="image-container-inner rounded-corners">
+									<img src={this.state.resultImage} alt={"Uploaded"} className="rounded-corners image-box"/>
+								</div>
 							</div>
-						</div>
-					</label>
-				</div>
+						</label>
+					</div>
+					<form method="get" action={this.state.resultImage}>
+						<button type="submit" className="btn btn-primary btn-lg btn-block">
+							Download
+						</button>
+					</form>
+				</>
 			);
 		}
 
 		return (
 			<div>
-				{contentHeading}
 				{progressSection}
 				{imageSection}
 			</div>
@@ -124,15 +153,17 @@ class StatusPage extends Component {
 		// Do an API call to check either the progress or display the results.
 		// this.getStats(id);
 		let bodyContent = this.getBodyContent();
+		let headerText = this.getHeaderText();
+
 		return (
 					<>
-						<div className="col-12 highlight-test">
-							<p className="text-center lead">
-								Checking the content of ID: {id}
-							</p>
+
+						<div className="col-12 highlight-test text-center">
+							<h6><b>{headerText}</b></h6>
+							{id}
 						</div>
 
-						<div className="col-12 highlight-test">
+						<div className="col-12 highlight-test top-margin">
 							{bodyContent}
 						</div>
 					</>

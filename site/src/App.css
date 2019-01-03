@@ -1,7 +1,24 @@
-/*body {*/
-  /*background-color: #282c34 !important;*/
-  /*color: white !important;*/
-/*}*/
+h1 {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+    font-size: 1.8em;
+}
+
+.bottom-icons {
+    font-size: 2.0em;
+    color: #4d5d6e;
+}
+
+.bottom-icons:hover {
+    cursor: pointer;
+    color: #374251;
+}
+
+
+.sub-heading {
+    font-size: 0.9em;
+    color: #6e6e6e;
+}
 
 input[type="file"] {
     display: none;
@@ -39,7 +56,6 @@ input[type="file"] {
 }
 
 .image-container-inner:hover {
-    background-color: yellow;
     cursor: pointer;
 }
 
@@ -48,7 +64,6 @@ input[type="file"] {
 }
 
 .image-container-inner:active {
-    background-color: red;
     cursor: pointer;
 }
 
@@ -77,10 +92,6 @@ input[type="file"] {
 
 .rounded-corners {
     border-radius: 5px;
-}
-
-.highlight-test {
-    /*border: 1px solid #16171d;*/
 }
 
 .top-margin {
@@ -113,15 +124,6 @@ input[type="file"] {
     border-radius: 50%;
     width: 42px;
     height: 42px;
-    animation: spin 1s linear infinite;
-}
-
-.light-loader {
-    border: 3px solid #ffffff; /* Light grey */
-    border-top: 3px solid #00cae8; /* Blue */
-    border-radius: 50%;
-    width: 16px;
-    height: 16px;
     animation: spin 1s linear infinite;
 }
 
