@@ -40,6 +40,12 @@ My goal with this project is to try and turn this model into a service. I wanted
 * **Travis CICD**: Any push to the `master` branch on GitHub will cause Travis CI to build and deploy both the static site and the Docker container.
 * **(Bonus) Desktop App and CLI**: I also included some scripts that show how to use the network both as a desktop app (PyQT) or directly via CLI.
 
+
+
+![style_transfer_phone](images/style_transfer_phone.png)
+
+
+
 ## Usage
 
 #### Web App
