@@ -3,6 +3,10 @@ import axios from "axios";
 import imageOil from '../images/style_oil.png';
 import imageMarvel from '../images/style_marvel.png';
 import imageWaterColor from '../images/style_watercolor.png';
+import imageHokusai from '../images/style_hokusai.png';
+import imageGandalf from '../images/style_gandalf.png';
+import imageWave from '../images/style_wave.png';
+import imageStarry from '../images/style_starry.png';
 import { withRouter } from "react-router-dom";
 import withPageLayout from "./hoc/withPageLayout";
 import ImageUploader from "./ImageUploader";
@@ -22,7 +26,7 @@ class LandingPage extends Component {
 
 		// API Constants.
 
-		this.styleImages = [imageOil, imageWaterColor, imageMarvel];
+		this.styleImages = [imageWave, imageGandalf, imageWaterColor, imageStarry, imageOil, imageHokusai, imageMarvel];
 		this.styleTransferAPIEndpoint =
 			"https://xliyrr4cp4.execute-api.ap-southeast-2.amazonaws.com/default/requestStyleTransfer";
 

@@ -1,4 +1,4 @@
-# Pytorch Style Transfer: Web App
+# **Pytorch** Style Transfer: Web App
 [![Build Status](https://travis-ci.com/krinj/pytorch-style-transfer.svg?branch=master)](https://travis-ci.com/krinj/pytorch-style-transfer) [![Docker CPU](https://img.shields.io/badge/docker-worker-blue.svg)](https://cloud.docker.com/u/infrarift/repository/docker/infrarift/style-transfer-worker) [![S3_Website](https://img.shields.io/badge/s3-website-yellow.svg)](http://krinj-style-transfer.s3-website-ap-southeast-2.amazonaws.com/)
 
 This is an implementation of a [Style Transfer Network](https://medium.com/tensorflow/neural-style-transfer-creating-art-with-deep-learning-using-tf-keras-and-eager-execution-7d541ac31398) from [Udacity's Deep Learning Nanodegree](https://www.udacity.com/course/deep-learning-nanodegree--nd101), wrapped in a CLI interface, a desktop interface, and a hosted web app (cloud) interface. The purpose of this project is to explore ways of deploying an image based inference model end-to-end. The project is built using Python, Pytorch, Docker, React, and AWS.
@@ -9,6 +9,8 @@ This is an implementation of a [Style Transfer Network](https://medium.com/tenso
 * [Usage](#usage)
 * [Deployment](#deployment)
 * [Architecture](#architecture)
+* [Tech Stack](#tech-stack)
+* [To Do](#to-do)
 
 ## Overview
 
@@ -194,6 +196,8 @@ The Docker container must be hosted on a GPU machine. It contains the inference 
 
 ### Tech Stack
 
+Here is a list of the major technologies I've used in this project, what they are, and why I chose to use them.
+
 | Name        | Role                     | Reason                                                       |
 | ----------- | ------------------------ | ------------------------------------------------------------ |
 | React       | Javascript UI framework. | It's relatively simple to learn, and it's a great way to build a website that feels like an app in terms of UI and responsiveness. |
@@ -205,3 +209,11 @@ The Docker container must be hosted on a GPU machine. It contains the inference 
 | Docker      | Container.               | Neural networks and inference code can often come with a lot of messy dependencies. Jamming it all into a Docker image makes it easy to run anywhere without having to worry about dependencies. The worker is built into a Docker image, and can be run either locally or on the cloud. |
 | TravisCI    | CICD.                    | Deployment is a pain. Imagine if I had to manually build and deploy the React site every time I made a change! Instead, I can just configure Travis with some instructions, so that every time I push a new commit to this repository, Travis will build and deploy both the React site and the Docker container for me automatically. |
 
+## To Do
+
+There's always room to improve. Here is the list of what I'd do next if I were to continue this project.
+
+- [ ] **Research and implement an inference model that is much faster than what we have now**. This one is great for educational purposes, but it is way too slow. I want a style transfer model that can work in seconds - or even on video!
+- [ ] **Look into serverless inference**. I already had a shot at this but failed, so I'll have to try again. I basically want a Lambda service, but for GPU enabled Docker containers. Right now I have to run a 24/7 polling GPU container to support the service. Not great.
+- [ ] **Improve the queuing and status polling mechanisms**. I'm a bit of a newbie still at solutions architecture. Maybe I should ask someone with more experience on how to improve the design - for example, how should I poll and report the progress of a job?
+- [ ] **Unit and integration tests**. If this 'mini project' was to be complete, we'd also need a test suite for all the components included.
