@@ -9,6 +9,6 @@ output/
 
 app/miniconda\.sh
 
-run_worker\.sh
-
 app/style_output\.png
+
+run_worker_local\.sh

@@ -10,10 +10,15 @@ before_install:
   - cd site
 
 script:
+  # Login to docker, build and upload the image.
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+  - (cd ../app && bash build_docker.sh)
+  # Build the static site.
   - npm test
   - npm run build
 
 deploy:
+  # Deploy the static site.
   provider: s3
   access_key_id: $AWS_ACCESS_KEY
   secret_access_key: $AWS_SECRET_KEY
