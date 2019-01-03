@@ -53,14 +53,14 @@ class LandingPage extends Component {
 		if (maxSize != null && maxSize > 0) {
 
 			if (width > height) {
-				if (width > maxSize) {
-					height *= maxSize / width;
-					width = maxSize;
-				}
-			} else {
 				if (height > maxSize) {
 					width *= maxSize / height;
 					height = maxSize;
+				}
+			} else {
+				if (width > maxSize) {
+					height *= maxSize / width;
+					width = maxSize;
 				}
 			}
 			canvas.width = width;
@@ -91,7 +91,7 @@ class LandingPage extends Component {
 		let img = document.createElement("img");
 		img.onload = () => {
 
-			let dataUrl = this.convertImageToDataURL(img, 400);
+			let dataUrl = this.convertImageToDataURL(img, 512);
 
 			console.log("Got B64");
 			console.log(dataUrl);
